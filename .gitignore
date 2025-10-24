@@ -1,0 +1,33 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploads (keep directory structure but ignore uploaded files)
+uploads/*
+!uploads/.gitkeep
+uploads/documents/*
+!uploads/documents/.gitkeep
+uploads/temp/*
+!uploads/temp/.gitkeep
+
+# Configuration (uncomment if you want to ignore local config)
+# config.php
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+/tmp/*
+*.tmp
+
+# Cache
+cache/
+*.cache
