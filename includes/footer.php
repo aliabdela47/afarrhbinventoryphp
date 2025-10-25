@@ -29,6 +29,26 @@
             document.getElementById('mainFooter').classList.toggle('expanded');
         });
         
+        // Submenu toggle
+        document.querySelectorAll('.has-submenu > a').forEach(function(element) {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                parent.classList.toggle('open');
+            });
+        });
+        
+        // Auto-expand submenu if current page is in submenu
+        document.addEventListener('DOMContentLoaded', function() {
+            const activeSubmenuItem = document.querySelector('.sidebar-submenu a.active');
+            if (activeSubmenuItem) {
+                const submenuParent = activeSubmenuItem.closest('.has-submenu');
+                if (submenuParent) {
+                    submenuParent.classList.add('open');
+                }
+            }
+        });
+        
         // Change language
         function changeLanguage(lang) {
             fetch('api/change-language.php', {

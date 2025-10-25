@@ -65,6 +65,45 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </a>
         </li>
         
+        <li class="has-submenu">
+            <a href="javascript:void(0)" class="<?php echo strpos($currentPage, 'vehicles') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-truck"></i>
+                <span>Vehicles</span>
+            </a>
+            <ul class="sidebar-submenu">
+                <li>
+                    <a href="pages/vehicles/dashboard.php">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/list.php">
+                        <i class="bi bi-list-ul"></i>
+                        <span>All Vehicles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/map.php">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Vehicle Tracking</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/assignments/list.php">
+                        <i class="bi bi-calendar-check"></i>
+                        <span>Assignments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/reports/index.php">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        
         <li>
             <a href="pages/reports/index.php" class="<?php echo strpos($currentPage, 'reports') !== false ? 'active' : ''; ?>">
                 <i class="bi bi-file-earmark-text"></i>
