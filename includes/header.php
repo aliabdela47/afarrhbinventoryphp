@@ -132,11 +132,12 @@ $currentCalendar = $_SESSION['calendar'] ?? 'gregorian';
             left: 0;
             bottom: 0;
             width: var(--sidebar-width);
-            background: #2c3e50;
+            background: linear-gradient(180deg, #6b46c1 0%, #553c9a 100%);
             color: white;
             overflow-y: auto;
             transition: all 0.3s;
             z-index: 1020;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
         
         .sidebar.collapsed {
@@ -149,7 +150,7 @@ $currentCalendar = $_SESSION['calendar'] ?? 'gregorian';
             margin: 0;
         }
         
-        .sidebar-menu li {
+        .sidebar-menu > li {
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
@@ -158,20 +159,69 @@ $currentCalendar = $_SESSION['calendar'] ?? 'gregorian';
             align-items: center;
             gap: 0.75rem;
             padding: 1rem 1.5rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.9);
             text-decoration: none;
             transition: all 0.3s;
+            border-radius: 8px;
+            margin: 0.25rem 0.5rem;
         }
         
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background: rgba(255,255,255,0.1);
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.15);
             color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-weight: 600;
         }
         
         .sidebar-menu i {
             width: 20px;
             text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        /* Submenu styles */
+        .sidebar-menu .has-submenu > a {
+            position: relative;
+        }
+        
+        .sidebar-menu .has-submenu > a::after {
+            content: '\F282';
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            right: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar-menu .has-submenu.open > a::after {
+            transform: rotate(90deg);
+        }
+        
+        .sidebar-submenu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .sidebar-menu .has-submenu.open .sidebar-submenu {
+            max-height: 500px;
+        }
+        
+        .sidebar-submenu a {
+            padding: 0.75rem 1.5rem 0.75rem 3.5rem;
+            font-size: 0.9rem;
+            margin: 0.125rem 0.5rem;
+        }
+        
+        .sidebar-submenu i {
+            font-size: 0.9rem;
         }
         
         /* Main Content */

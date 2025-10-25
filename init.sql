@@ -260,6 +260,81 @@ CREATE TABLE AUDITLOG (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
+-- VEHICLES TABLE
+-- =====================================================
+CREATE TABLE VEHICLES (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_code VARCHAR(50) UNIQUE NOT NULL,
+    plate_number VARCHAR(50) UNIQUE NOT NULL,
+    vehicle_type VARCHAR(50),
+    make VARCHAR(100),
+    model VARCHAR(100),
+    year INT,
+    color VARCHAR(50),
+    fuel_type VARCHAR(50),
+    capacity INT,
+    status ENUM('available', 'assigned', 'maintenance', 'inactive') DEFAULT 'available',
+    mileage DECIMAL(10, 2) DEFAULT 0.00,
+    last_service_date DATE,
+    next_service_date DATE,
+    insurance_expiry DATE,
+    notes TEXT,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_code (vehicle_code),
+    INDEX idx_plate (plate_number),
+    INDEX idx_status (status),
+    INDEX idx_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
+-- VEHICLE_LOCATIONS TABLE
+-- =====================================================
+CREATE TABLE VEHICLE_LOCATIONS (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT NOT NULL,
+    latitude DECIMAL(10, 8) NOT NULL,
+    longitude DECIMAL(11, 8) NOT NULL,
+    speed DECIMAL(5, 2) DEFAULT 0.00,
+    heading INT,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES VEHICLES(id) ON DELETE CASCADE,
+    INDEX idx_vehicle (vehicle_id),
+    INDEX idx_recorded (recorded_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
+-- VEHICLEASSIGNMENTS TABLE
+-- =====================================================
+CREATE TABLE VEHICLEASSIGNMENTS (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    assignment_number VARCHAR(50) UNIQUE NOT NULL,
+    vehicle_id INT NOT NULL,
+    driver_id INT NOT NULL,
+    assigned_by INT,
+    assignment_date DATE NOT NULL,
+    return_date DATE,
+    purpose TEXT,
+    destination VARCHAR(255),
+    starting_mileage DECIMAL(10, 2),
+    ending_mileage DECIMAL(10, 2),
+    fuel_issued DECIMAL(10, 2),
+    status ENUM('active', 'completed', 'cancelled') DEFAULT 'active',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES VEHICLES(id) ON DELETE CASCADE,
+    FOREIGN KEY (driver_id) REFERENCES EMPLIST(id) ON DELETE CASCADE,
+    FOREIGN KEY (assigned_by) REFERENCES USERS(id) ON DELETE SET NULL,
+    INDEX idx_number (assignment_number),
+    INDEX idx_vehicle (vehicle_id),
+    INDEX idx_driver (driver_id),
+    INDEX idx_status (status),
+    INDEX idx_date (assignment_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
 -- SEED DATA
 -- =====================================================
 
@@ -339,6 +414,26 @@ INSERT INTO ITEMMOVEMENTS (item_id, movement_type, quantity, reference_type, ref
 (8, 'IN', 8, 'INITIAL_STOCK', NULL, 2, 1, CURDATE(), 'Initial stock entry'),
 (9, 'IN', 12, 'INITIAL_STOCK', NULL, 1, 1, CURDATE(), 'Initial stock entry'),
 (10, 'IN', 200, 'INITIAL_STOCK', NULL, 1, 1, CURDATE(), 'Initial stock entry');
+
+-- Insert vehicles
+INSERT INTO VEHICLES (vehicle_code, plate_number, vehicle_type, make, model, year, color, fuel_type, capacity, status, mileage, last_service_date, next_service_date, insurance_expiry, is_active) VALUES
+('VEH001', 'AF-001-AA', 'Ambulance', 'Toyota', 'Land Cruiser', 2020, 'White', 'Diesel', 6, 'available', 45000.00, DATE_SUB(CURDATE(), INTERVAL 30 DAY), DATE_ADD(CURDATE(), INTERVAL 60 DAY), DATE_ADD(CURDATE(), INTERVAL 180 DAY), 1),
+('VEH002', 'AF-002-AA', 'Van', 'Toyota', 'Hiace', 2019, 'White', 'Diesel', 12, 'assigned', 62000.00, DATE_SUB(CURDATE(), INTERVAL 45 DAY), DATE_ADD(CURDATE(), INTERVAL 45 DAY), DATE_ADD(CURDATE(), INTERVAL 150 DAY), 1),
+('VEH003', 'AF-003-AA', 'Pickup', 'Isuzu', 'D-Max', 2021, 'Blue', 'Diesel', 5, 'available', 28000.00, DATE_SUB(CURDATE(), INTERVAL 15 DAY), DATE_ADD(CURDATE(), INTERVAL 75 DAY), DATE_ADD(CURDATE(), INTERVAL 200 DAY), 1),
+('VEH004', 'AF-004-AA', 'Sedan', 'Toyota', 'Corolla', 2018, 'Silver', 'Petrol', 5, 'maintenance', 95000.00, DATE_SUB(CURDATE(), INTERVAL 5 DAY), DATE_ADD(CURDATE(), INTERVAL 10 DAY), DATE_ADD(CURDATE(), INTERVAL 90 DAY), 1),
+('VEH005', 'AF-005-AA', 'SUV', 'Nissan', 'Patrol', 2022, 'Black', 'Diesel', 7, 'available', 15000.00, DATE_SUB(CURDATE(), INTERVAL 60 DAY), DATE_ADD(CURDATE(), INTERVAL 30 DAY), DATE_ADD(CURDATE(), INTERVAL 270 DAY), 1);
+
+-- Insert vehicle locations (sample GPS coordinates for Semera, Afar)
+INSERT INTO VEHICLE_LOCATIONS (vehicle_id, latitude, longitude, speed, heading, recorded_at) VALUES
+(1, 11.7942, 40.9903, 0.00, 0, NOW()),
+(2, 11.7850, 40.9850, 45.50, 90, NOW()),
+(3, 11.8020, 41.0020, 0.00, 0, NOW()),
+(4, 11.7900, 40.9950, 0.00, 0, NOW()),
+(5, 11.7980, 41.0050, 0.00, 0, NOW());
+
+-- Insert vehicle assignments
+INSERT INTO VEHICLEASSIGNMENTS (assignment_number, vehicle_id, driver_id, assigned_by, assignment_date, purpose, destination, starting_mileage, status, notes) VALUES
+('VAS-2024-001', 2, 3, 1, CURDATE(), 'Medical supply delivery to health centers', 'Dubti District Hospital', 62000.00, 'active', 'Regular supply run');
 
 -- =====================================================
 -- COMPLETED
