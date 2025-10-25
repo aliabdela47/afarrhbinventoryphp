@@ -177,4 +177,12 @@ return [
     'version' => 'ስሪት',
     'copyright' => 'የቅጂ መብት',
     'all_rights_reserved' => 'መብቱ በህግ የተጠበቀ ነው',
+    
+    // Additional
+    'actions' => 'እርምጃዎች',
+    'all' => 'ሁሉም',
+    'by' => 'በ',
+    'next' => 'ቀጣይ',
+    'previous' => 'ቀዳሚ',
+    'notes' => 'ማስታወሻዎች',
 ];

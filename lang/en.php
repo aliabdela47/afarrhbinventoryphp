@@ -177,4 +177,12 @@ return [
     'version' => 'Version',
     'copyright' => 'Copyright',
     'all_rights_reserved' => 'All rights reserved',
+    
+    // Additional
+    'actions' => 'Actions',
+    'all' => 'All',
+    'by' => 'By',
+    'next' => 'Next',
+    'previous' => 'Previous',
+    'notes' => 'Notes',
 ];
