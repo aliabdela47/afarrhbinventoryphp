@@ -30,7 +30,7 @@ A secure, bilingual inventory management system designed for the Afar Regional H
 
 #### Frontend (Tailwind Version)
 - **Tailwind CSS**: Utility-first CSS framework (Play CDN)
-- **Flowbite**: Component library
+- **Flowbite**: UI component library for Tailwind CSS with pre-built components
 - **Alpine.js**: Lightweight JavaScript framework (CDN)
 - **SweetAlert2**: Beautiful alerts and notifications (CDN)
 - **Heroicons**: Icon library
@@ -111,12 +111,14 @@ afarrhbinventoryphp/
 5. **ITEMS** - Inventory items
 6. **ITEMDOCUMENTS** - File attachments for items
 7. **CUSTOMERS** - Customer information
-8. **REQUESTS** - Material requests (Model-19)
+8. **REQUESTS** - Material requests (Model-19: standardized request form)
 9. **REQUESTITEMS** - Request line items
-10. **ISSUANCES** - Material issuances (Model-20/22)
+10. **ISSUANCES** - Material issuances (Model-20/22: standardized issuance forms)
 11. **ISSUANCEITEMS** - Issuance line items
 12. **ITEMMOVEMENTS** - Stock movement history
 13. **AUDITLOG** - Audit trail for all operations
+
+> **Note**: Model-19, Model-20, and Model-22 refer to standardized Ethiopian government forms used for material management. These are commonly used across public institutions in Ethiopia for inventory tracking and accountability.
 
 ### Relationships
 
@@ -240,9 +242,9 @@ const ethDate = gregorianToEthiopian(2024, 10, 24);
 - Low stock notifications
 
 ### Request & Issuance
-- Material request workflow (Model-19)
+- Material request workflow (Model-19: standardized material request form)
 - Approval process
-- Material issuance (Model-20/22)
+- Material issuance (Model-20/22: standardized issuance and delivery forms)
 - Digital signatures
 - Request-to-issuance tracking
 
