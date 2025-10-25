@@ -66,6 +66,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </li>
         
         <li>
+            <a href="pages/vehicles/list.php" class="<?php echo strpos($currentPage, 'vehicles') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-truck"></i>
+                <span><?php echo e(t('vehicles')); ?></span>
+            </a>
+        </li>
+        
+        <li>
             <a href="pages/reports/index.php" class="<?php echo strpos($currentPage, 'reports') !== false ? 'active' : ''; ?>">
                 <i class="bi bi-file-earmark-text"></i>
                 <span><?php echo e(t('reports')); ?></span>

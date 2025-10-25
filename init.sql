@@ -260,6 +260,68 @@ CREATE TABLE AUDITLOG (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =====================================================
+-- VEHICLES TABLE
+-- =====================================================
+CREATE TABLE VEHICLES (
+    vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
+    plate_number VARCHAR(20) UNIQUE NOT NULL,
+    type ENUM('Car', 'Pickup', 'Truck', 'Motorcycle', 'Ambulance', 'Other') NOT NULL,
+    model VARCHAR(100),
+    manufacturer VARCHAR(100),
+    year INT,
+    status ENUM('Available', 'Assigned', 'In Maintenance', 'Out of Service') DEFAULT 'Available',
+    current_location VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_plate (plate_number),
+    INDEX idx_status (status),
+    INDEX idx_type (type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
+-- VEHICLE_ASSIGNMENTS TABLE
+-- =====================================================
+CREATE TABLE VEHICLE_ASSIGNMENTS (
+    assignment_id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT NOT NULL,
+    emp_id INT NOT NULL,
+    purpose TEXT,
+    destination VARCHAR(255),
+    departure_date DATE NOT NULL,
+    expected_return_date DATE,
+    actual_return_date DATE,
+    status ENUM('Active', 'Completed', 'Cancelled') DEFAULT 'Active',
+    assigned_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES VEHICLES(vehicle_id) ON DELETE CASCADE,
+    FOREIGN KEY (emp_id) REFERENCES EMPLIST(id) ON DELETE CASCADE,
+    FOREIGN KEY (assigned_by) REFERENCES USERS(id) ON DELETE SET NULL,
+    INDEX idx_vehicle (vehicle_id),
+    INDEX idx_employee (emp_id),
+    INDEX idx_status (status),
+    INDEX idx_departure (departure_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
+-- VEHICLE_MOVEMENTS TABLE
+-- =====================================================
+CREATE TABLE VEHICLE_MOVEMENTS (
+    movement_id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT NOT NULL,
+    movement_type ENUM('Assigned', 'Returned', 'Maintenance', 'Transfer') NOT NULL,
+    performed_by INT,
+    movement_date DATETIME NOT NULL,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES VEHICLES(vehicle_id) ON DELETE CASCADE,
+    FOREIGN KEY (performed_by) REFERENCES USERS(id) ON DELETE SET NULL,
+    INDEX idx_vehicle (vehicle_id),
+    INDEX idx_type (movement_type),
+    INDEX idx_date (movement_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
 -- SEED DATA
 -- =====================================================
 
@@ -339,6 +401,22 @@ INSERT INTO ITEMMOVEMENTS (item_id, movement_type, quantity, reference_type, ref
 (8, 'IN', 8, 'INITIAL_STOCK', NULL, 2, 1, CURDATE(), 'Initial stock entry'),
 (9, 'IN', 12, 'INITIAL_STOCK', NULL, 1, 1, CURDATE(), 'Initial stock entry'),
 (10, 'IN', 200, 'INITIAL_STOCK', NULL, 1, 1, CURDATE(), 'Initial stock entry');
+
+-- Insert sample vehicles
+INSERT INTO VEHICLES (plate_number, type, model, manufacturer, year, status, current_location) VALUES
+('3-12345', 'Car', 'Land Cruiser', 'Toyota', 2020, 'Available', 'Main Office Semera'),
+('3-23456', 'Ambulance', 'Hiace', 'Toyota', 2021, 'Available', 'Main Office Semera'),
+('3-34567', 'Pickup', 'Hilux', 'Toyota', 2019, 'Assigned', 'Field Work Dubti'),
+('3-45678', 'Motorcycle', 'TVS', 'TVS', 2022, 'Available', 'Main Office Semera'),
+('3-56789', 'Truck', 'Isuzu FTR', 'Isuzu', 2018, 'In Maintenance', 'Workshop Semera');
+
+-- Insert sample vehicle assignment
+INSERT INTO VEHICLE_ASSIGNMENTS (vehicle_id, emp_id, purpose, destination, departure_date, expected_return_date, status, assigned_by) VALUES
+(3, 3, 'Supply delivery to health centers', 'Dubti District', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'Active', 2);
+
+-- Insert vehicle movements
+INSERT INTO VEHICLE_MOVEMENTS (vehicle_id, movement_type, performed_by, movement_date, notes) VALUES
+(3, 'Assigned', 2, NOW(), 'Assigned to Hassan Ibrahim for supply delivery');
 
 -- =====================================================
 -- COMPLETED
