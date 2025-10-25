@@ -1,4 +1,29 @@
 <?php
+/**
+ * Page Header
+ * AfarRHB Inventory Management System
+ */
+
+if (!isAuthenticated()) {
+    redirect('index.php');
+}
+
+$currentUser = getUserFullName();
+$currentRole = getUserRole();
+$currentLang = $_SESSION['lang'] ?? 'en';
+$currentCalendar = $_SESSION['calendar'] ?? 'gregorian';
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $currentLang; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo e($pageTitle ?? APP_NAME); ?></title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 if (!isLoggedIn()) {
     redirect(baseUrl('login.php'));
 }
@@ -26,282 +51,334 @@ $currentUser = currentUser();
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         /* Header */
-        .app-header {
+        .main-header {
+            height: var(--header-height);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: var(--header-height);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             z-index: 1030;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .app-header .navbar-brand {
-            color: white;
-            font-weight: 600;
+        .brand {
             font-size: 1.25rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .app-header .navbar-brand:hover {
-            color: rgba(255,255,255,0.9);
-        }
-        
-        .app-header .nav-link,
-        .app-header .btn {
+        .brand:hover {
             color: white;
         }
         
-        .app-header .nav-link:hover,
-        .app-header .btn:hover {
-            color: rgba(255,255,255,0.8);
+        .header-search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
         }
         
-        .app-header .dropdown-menu {
-            color: initial;
+        .header-search input {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+        
+        .header-search input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .header-search input:focus {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            color: white;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .header-btn:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+        
+        .notification-badge {
+            position: relative;
+        }
+        
+        .notification-badge .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.6rem;
         }
         
         /* Sidebar */
-        .app-sidebar {
+        .sidebar {
             position: fixed;
             top: var(--header-height);
             left: 0;
             bottom: 0;
             width: var(--sidebar-width);
-            background-color: var(--bs-body-bg);
-            border-right: 1px solid var(--bs-border-color);
-            overflow-y: auto;
-            z-index: 1020;
-            transition: transform 0.3s ease;
-        }
-        
-        .app-sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-        
-        .app-sidebar .nav-link {
-            color: var(--bs-body-color);
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            margin: 0.25rem 0.5rem;
-            transition: all 0.2s;
-        }
-        
-        .app-sidebar .nav-link:hover {
-            background-color: var(--bs-secondary-bg);
-        }
-        
-        .app-sidebar .nav-link.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(180deg, #6b46c1 0%, #553c9a 100%);
             color: white;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 1020;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
         
-        .app-sidebar .nav-link i {
-            width: 1.5rem;
-            text-align: center;
+        .sidebar.collapsed {
+            margin-left: calc(-1 * var(--sidebar-width));
         }
         
-        .sidebar-section {
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu > li {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 8px;
+            margin: 0.25rem 0.5rem;
+        }
+        
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
             font-weight: 600;
-            text-transform: uppercase;
-            color: var(--bs-secondary-color);
-            margin-top: 1rem;
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        /* Submenu styles */
+        .sidebar-menu .has-submenu > a {
+            position: relative;
+        }
+        
+        .sidebar-menu .has-submenu > a::after {
+            content: '\F282';
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            right: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar-menu .has-submenu.open > a::after {
+            transform: rotate(90deg);
+        }
+        
+        .sidebar-submenu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .sidebar-menu .has-submenu.open .sidebar-submenu {
+            max-height: 500px;
+        }
+        
+        .sidebar-submenu a {
+            padding: 0.75rem 1.5rem 0.75rem 3.5rem;
+            font-size: 0.9rem;
+            margin: 0.125rem 0.5rem;
+        }
+        
+        .sidebar-submenu i {
+            font-size: 0.9rem;
         }
         
         /* Main Content */
-        .app-main {
-            margin-top: var(--header-height);
+        .main-content {
             margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
             padding: 2rem;
             min-height: calc(100vh - var(--header-height));
-            transition: margin-left 0.3s ease;
+            background: #f8f9fa;
+            transition: margin-left 0.3s;
         }
         
-        .app-main.expanded {
+        .main-content.expanded {
             margin-left: 0;
         }
         
         /* Cards */
         .metric-card {
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 10px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .metric-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .metric-card.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         
-        /* Tables */
-        .table-responsive {
-            border-radius: 0.5rem;
-            overflow: hidden;
+        .metric-card.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
         
-        .table thead {
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        .metric-card.warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
         
-        /* Search Bar */
-        .search-bar {
-            max-width: 400px;
+        .metric-card.info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .metric-card h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Footer */
+        .main-footer {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s;
+        }
+        
+        .main-footer.expanded {
+            margin-left: 0;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
-            .app-sidebar {
-                transform: translateX(-100%);
+            .sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
             }
             
-            .app-sidebar.show {
-                transform: translateX(0);
-            }
-            
-            .app-main {
+            .sidebar.show {
                 margin-left: 0;
+            }
+            
+            .main-content,
+            .main-footer {
+                margin-left: 0;
+            }
+            
+            .header-search {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg app-header">
-        <div class="container-fluid">
-            <button class="btn btn-link text-white" id="sidebarToggle">
-                <i class="bi bi-list fs-4"></i>
+    <header class="main-header">
+        <button class="btn header-btn" id="sidebarToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        
+        <a href="dashboard.php" class="brand ms-3">
+            <i class="bi bi-box-seam"></i>
+            <span><?php echo e(APP_NAME); ?></span>
+        </a>
+        
+        <div class="header-search">
+            <input type="text" class="form-control" placeholder="<?php echo e(t('search')); ?>..." id="globalSearch">
+        </div>
+        
+        <div class="header-controls">
+            <!-- Language Toggle -->
+            <div class="dropdown">
+                <button class="btn header-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-translate"></i>
+                    <span><?php echo $currentLang === 'en' ? 'EN' : 'አማ'; ?></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeLanguage('am')">አማርኛ</a></li>
+                </ul>
+            </div>
+            
+            <!-- Calendar Toggle -->
+            <div class="dropdown">
+                <button class="btn header-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-calendar3"></i>
+                    <span><?php echo ucfirst($currentCalendar); ?></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" onclick="changeCalendar('gregorian')">Gregorian</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeCalendar('ethiopian')">Ethiopian</a></li>
+                </ul>
+            </div>
+            
+            <!-- Notifications -->
+            <button class="btn header-btn notification-badge" type="button">
+                <i class="bi bi-bell"></i>
+                <span class="badge bg-danger">3</span>
             </button>
             
-            <a class="navbar-brand ms-2" href="<?php echo baseUrl('index.php'); ?>">
-                <i class="bi bi-box-seam"></i> <?php echo __('app_name'); ?>
-            </a>
-            
-            <!-- Search -->
-            <form class="d-none d-md-flex mx-auto search-bar" role="search">
-                <div class="input-group">
-                    <input class="form-control" type="search" placeholder="<?php echo __('search'); ?>..." 
-                           aria-label="Search" id="globalSearch">
-                    <button class="btn btn-outline-light" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </form>
-            
-            <!-- Right Menu -->
-            <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
-                <!-- Language Toggle -->
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-translate"></i>
-                        <span class="d-none d-lg-inline ms-1">
-                            <?php echo currentLang() === 'en' ? __('english') : __('amharic'); ?>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="?set_lang=en">
-                                <i class="bi bi-globe"></i> English
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="?set_lang=am">
-                                <i class="bi bi-globe"></i> አማርኛ
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Calendar Toggle -->
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-calendar"></i>
-                        <span class="d-none d-lg-inline ms-1">
-                            <?php echo __(currentCalendar()); ?>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="?set_calendar=gregorian">
-                                <i class="bi bi-calendar"></i> <?php echo __('gregorian'); ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="?set_calendar=ethiopian">
-                                <i class="bi bi-calendar"></i> <?php echo __('ethiopian'); ?>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- Theme Toggle -->
-                <li class="nav-item me-2">
-                    <button class="btn btn-link nav-link" id="themeToggle">
-                        <i class="bi bi-moon-stars"></i>
-                    </button>
-                </li>
-                
-                <!-- Notifications -->
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="#" id="notificationsBtn">
-                        <i class="bi bi-bell"></i>
-                        <span class="badge bg-danger rounded-pill" style="font-size: 0.6rem;">3</span>
-                    </a>
-                </li>
-                
-                <!-- User Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i>
-                        <span class="d-none d-lg-inline ms-1"><?php echo e($currentUser['name']); ?></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <h6 class="dropdown-header">
-                                <?php echo e($currentUser['name']); ?><br>
-                                <small class="text-muted"><?php echo e($currentUser['email']); ?></small>
-                            </h6>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-person"></i> <?php echo __('profile'); ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-gear"></i> <?php echo __('settings'); ?>
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="<?php echo baseUrl('logout.php'); ?>">
-                                <i class="bi bi-box-arrow-right"></i> <?php echo __('logout'); ?>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            <!-- User Menu -->
+            <div class="dropdown">
+                <button class="btn header-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i>
+                    <span><?php echo e($currentUser); ?></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> <?php echo e(t('profile')); ?></a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> <?php echo e(t('settings')); ?></a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right"></i> <?php echo e(t('logout')); ?></a></li>
+                </ul>
+            </div>
         </div>
-    </nav>
-    
-    <!-- Handle language and calendar changes -->
-    <?php
-    if (isset($_GET['set_lang'])) {
-        setLang($_GET['set_lang']);
-        redirect($_SERVER['PHP_SELF']);
-    }
-    
-    if (isset($_GET['set_calendar'])) {
-        setCalendar($_GET['set_calendar']);
-        redirect($_SERVER['PHP_SELF']);
-    }
-    ?>
+    </header>

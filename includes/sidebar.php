@@ -1,98 +1,130 @@
-    <!-- Sidebar -->
-    <nav class="app-sidebar" id="sidebar">
-        <!-- Dashboard -->
-        <div class="sidebar-section"><?php echo __('dashboard'); ?></div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : ''; ?>" 
-                   href="<?php echo baseUrl('index.php'); ?>">
-                    <i class="bi bi-speedometer2"></i> <?php echo __('dashboard'); ?>
-                </a>
-            </li>
-        </ul>
+<?php
+/**
+ * Sidebar Navigation
+ * AfarRHB Inventory Management System
+ */
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+        <li>
+            <a href="dashboard.php" class="<?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">
+                <i class="bi bi-speedometer2"></i>
+                <span><?php echo e(t('dashboard')); ?></span>
+            </a>
+        </li>
         
-        <!-- Inventory Management -->
-        <div class="sidebar-section"><?php echo __('items'); ?></div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/items/list.php'); ?>">
-                    <i class="bi bi-box"></i> <?php echo __('items'); ?>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/warehouses/list.php'); ?>">
-                    <i class="bi bi-building"></i> <?php echo __('warehouses'); ?>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/categories/list.php'); ?>">
-                    <i class="bi bi-tags"></i> <?php echo __('categories'); ?>
-                </a>
-            </li>
-        </ul>
+        <li>
+            <a href="pages/items/list.php" class="<?php echo strpos($currentPage, 'items') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-box-seam"></i>
+                <span><?php echo e(t('items')); ?></span>
+            </a>
+        </li>
         
-        <!-- Requests & Issuances -->
-        <div class="sidebar-section"><?php echo __('requests'); ?> & <?php echo __('issuances'); ?></div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/requests/list.php'); ?>">
-                    <i class="bi bi-file-text"></i> <?php echo __('requests'); ?> (Model-20)
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/issuances/list.php'); ?>">
-                    <i class="bi bi-file-earmark-check"></i> <?php echo __('issuances'); ?> (Model-22)
-                </a>
-            </li>
-        </ul>
+        <li>
+            <a href="pages/categories/list.php" class="<?php echo strpos($currentPage, 'categories') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-grid-3x3-gap"></i>
+                <span><?php echo e(t('categories')); ?></span>
+            </a>
+        </li>
         
-        <!-- People -->
-        <div class="sidebar-section"><?php echo __('employees'); ?> & <?php echo __('customers'); ?></div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/employees/list.php'); ?>">
-                    <i class="bi bi-people"></i> <?php echo __('employees'); ?>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/customers/list.php'); ?>">
-                    <i class="bi bi-person-badge"></i> <?php echo __('customers'); ?>
-                </a>
-            </li>
-        </ul>
+        <li>
+            <a href="pages/warehouses/list.php" class="<?php echo strpos($currentPage, 'warehouses') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-building"></i>
+                <span><?php echo e(t('warehouses')); ?></span>
+            </a>
+        </li>
         
-        <!-- Documents & Reports -->
-        <div class="sidebar-section"><?php echo __('documents'); ?> & <?php echo __('reports'); ?></div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/documents/list.php'); ?>">
-                    <i class="bi bi-file-earmark-pdf"></i> <?php echo __('documents'); ?>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/reports/index.php'); ?>">
-                    <i class="bi bi-graph-up"></i> <?php echo __('reports'); ?>
-                </a>
-            </li>
-        </ul>
+        <li>
+            <a href="pages/requests/list.php" class="<?php echo strpos($currentPage, 'requests') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-clipboard-check"></i>
+                <span><?php echo e(t('requests')); ?></span>
+            </a>
+        </li>
         
-        <!-- Admin -->
-        <?php if (isAdmin()): ?>
-        <div class="sidebar-section"><?php echo __('admin'); ?></div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/admin/users.php'); ?>">
-                    <i class="bi bi-person-gear"></i> <?php echo __('users'); ?>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo baseUrl('modules/admin/audit.php'); ?>">
-                    <i class="bi bi-clock-history"></i> <?php echo __('audit_log'); ?>
-                </a>
-            </li>
-        </ul>
+        <li>
+            <a href="pages/issuances/list.php" class="<?php echo strpos($currentPage, 'issuances') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-arrow-right-circle"></i>
+                <span><?php echo e(t('issuances')); ?></span>
+            </a>
+        </li>
+        
+        <li>
+            <a href="pages/customers/list.php" class="<?php echo strpos($currentPage, 'customers') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-people"></i>
+                <span><?php echo e(t('customers')); ?></span>
+            </a>
+        </li>
+        
+        <li>
+            <a href="pages/employees/list.php" class="<?php echo strpos($currentPage, 'employees') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-person-badge"></i>
+                <span><?php echo e(t('employees')); ?></span>
+            </a>
+        </li>
+        
+        <li class="has-submenu">
+            <a href="javascript:void(0)" class="<?php echo strpos($currentPage, 'vehicles') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-truck"></i>
+                <span>Vehicles</span>
+            </a>
+            <ul class="sidebar-submenu">
+                <li>
+                    <a href="pages/vehicles/dashboard.php">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/list.php">
+                        <i class="bi bi-list-ul"></i>
+                        <span>All Vehicles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/map.php">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Vehicle Tracking</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/assignments/list.php">
+                        <i class="bi bi-calendar-check"></i>
+                        <span>Assignments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pages/vehicles/reports/index.php">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        
+        <li>
+            <a href="pages/reports/index.php" class="<?php echo strpos($currentPage, 'reports') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-file-earmark-text"></i>
+                <span><?php echo e(t('reports')); ?></span>
+            </a>
+        </li>
+        
+        <?php if (hasRole('admin')): ?>
+        <li>
+            <a href="pages/audit_logs/list.php" class="<?php echo strpos($currentPage, 'audit') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-shield-check"></i>
+                <span><?php echo e(t('audit_logs')); ?></span>
+            </a>
+        </li>
+        
+        <li>
+            <a href="pages/settings/index.php" class="<?php echo strpos($currentPage, 'settings') !== false ? 'active' : ''; ?>">
+                <i class="bi bi-gear"></i>
+                <span><?php echo e(t('settings')); ?></span>
+            </a>
+        </li>
         <?php endif; ?>
-    </nav>
-    
-    <!-- Main Content -->
-    <main class="app-main" id="mainContent">
+    </ul>
+</aside>

@@ -1,3 +1,25 @@
+# PHP
+*.log
+*.cache
+*.tmp
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
 # IDE and Editor files
 .vscode/
 .idea/
@@ -5,29 +27,22 @@
 *.swo
 *~
 
-# OS files
-.DS_Store
-Thumbs.db
+# Composer (if used)
+vendor/
+composer.lock
 
-# Uploads (keep directory structure but ignore uploaded files)
-uploads/*
-!uploads/.gitkeep
-uploads/documents/*
-!uploads/documents/.gitkeep
-uploads/temp/*
-!uploads/temp/.gitkeep
+# Node modules (if used)
+node_modules/
+package-lock.json
 
-# Configuration (uncomment if you want to ignore local config)
-# config.php
+# Build artifacts
+dist/
+build/
 
 # Logs
+logs/
 *.log
-error_log
 
-# Temporary files
-/tmp/*
-*.tmp
-
-# Cache
-cache/
-*.cache
+# Database
+*.sql.backup
+*.sql.gz

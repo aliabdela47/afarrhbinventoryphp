@@ -1,208 +1,188 @@
 <?php
 /**
  * English Language File
+ * AfarRHB Inventory Management System
  */
 
 return [
     // General
     'app_name' => 'AfarRHB Inventory',
     'welcome' => 'Welcome',
-    'dashboard' => 'Dashboard',
     'logout' => 'Logout',
     'login' => 'Login',
+    'dashboard' => 'Dashboard',
+    'search' => 'Search',
+    'language' => 'Language',
+    'calendar' => 'Calendar',
+    'gregorian' => 'Gregorian',
+    'ethiopian' => 'Ethiopian',
+    'dark_mode' => 'Dark Mode',
+    'light_mode' => 'Light Mode',
+    'notifications' => 'Notifications',
     'profile' => 'Profile',
     'settings' => 'Settings',
-    'search' => 'Search',
-    'actions' => 'Actions',
+    
+    // Navigation
+    'inventory' => 'Inventory',
+    'items' => 'Items',
+    'categories' => 'Categories',
+    'warehouses' => 'Warehouses',
+    'requests' => 'Requests',
+    'issuances' => 'Issuances',
+    'customers' => 'Customers',
+    'employees' => 'Employees',
+    'reports' => 'Reports',
+    'audit_logs' => 'Audit Logs',
+    
+    // Actions
+    'add' => 'Add',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'view' => 'View',
-    'create' => 'Create',
     'save' => 'Save',
     'cancel' => 'Cancel',
-    'close' => 'Close',
     'submit' => 'Submit',
-    'back' => 'Back',
-    'next' => 'Next',
-    'previous' => 'Previous',
-    'yes' => 'Yes',
-    'no' => 'No',
-    'confirm' => 'Confirm',
-    'loading' => 'Loading...',
-    'no_data' => 'No data available',
-    'total' => 'Total',
-    'status' => 'Status',
-    'date' => 'Date',
-    'created_at' => 'Created At',
-    'updated_at' => 'Updated At',
-    'description' => 'Description',
+    'close' => 'Close',
+    'print' => 'Print',
+    'export' => 'Export',
+    'import' => 'Import',
+    'download' => 'Download',
+    'upload' => 'Upload',
+    'approve' => 'Approve',
+    'reject' => 'Reject',
+    'issue' => 'Issue',
+    
+    // Forms
     'name' => 'Name',
+    'description' => 'Description',
     'email' => 'Email',
     'password' => 'Password',
+    'confirm_password' => 'Confirm Password',
+    'full_name' => 'Full Name',
+    'username' => 'Username',
     'role' => 'Role',
+    'phone' => 'Phone',
+    'address' => 'Address',
+    'status' => 'Status',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'date' => 'Date',
+    'time' => 'Time',
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
     
-    // Navigation
-    'items' => 'Items',
-    'warehouses' => 'Warehouses',
-    'categories' => 'Categories',
-    'employees' => 'Employees',
-    'customers' => 'Customers',
-    'requests' => 'Requests',
-    'issuances' => 'Issuances',
-    'documents' => 'Documents',
-    'reports' => 'Reports',
-    'admin' => 'Admin',
-    'users' => 'Users',
-    'audit_log' => 'Audit Log',
+    // Items
+    'item_code' => 'Item Code',
+    'item_name' => 'Item Name',
+    'category' => 'Category',
+    'warehouse' => 'Warehouse',
+    'unit' => 'Unit',
+    'quantity' => 'Quantity',
+    'current_stock' => 'Current Stock',
+    'reorder_level' => 'Reorder Level',
+    'unit_price' => 'Unit Price',
+    'total_price' => 'Total Price',
+    'low_stock' => 'Low Stock',
+    
+    // Requests
+    'request_number' => 'Request Number',
+    'requester' => 'Requester',
+    'department' => 'Department',
+    'request_date' => 'Request Date',
+    'purpose' => 'Purpose',
+    'requested_quantity' => 'Requested Quantity',
+    'approved_quantity' => 'Approved Quantity',
+    'pending' => 'Pending',
+    'approved' => 'Approved',
+    'rejected' => 'Rejected',
+    'issued' => 'Issued',
+    
+    // Issuances
+    'issuance_number' => 'Issuance Number',
+    'issued_to' => 'Issued To',
+    'issued_by' => 'Issued By',
+    'issue_date' => 'Issue Date',
+    'receiver_signature' => 'Receiver Signature',
+    'issuer_signature' => 'Issuer Signature',
+    
+    // Customers
+    'customer_code' => 'Customer Code',
+    'customer_name' => 'Customer Name',
+    'contact_person' => 'Contact Person',
+    
+    // Employees
+    'employee_code' => 'Employee Code',
+    'employee_name' => 'Employee Name',
+    'position' => 'Position',
+    
+    // Messages
+    'please_login' => 'Please login to continue',
+    'login_success' => 'Login successful',
+    'login_failed' => 'Invalid email or password',
+    'logout_success' => 'Logged out successfully',
+    'access_denied' => 'Access denied',
+    'save_success' => 'Saved successfully',
+    'save_failed' => 'Failed to save',
+    'delete_success' => 'Deleted successfully',
+    'delete_failed' => 'Failed to delete',
+    'delete_confirm' => 'Are you sure you want to delete this item?',
+    'no_records' => 'No records found',
+    'error_occurred' => 'An error occurred',
+    'required_field' => 'This field is required',
+    'invalid_email' => 'Invalid email address',
+    'invalid_password' => 'Password must be at least 8 characters with uppercase, lowercase, and number',
+    'passwords_not_match' => 'Passwords do not match',
     
     // Dashboard
     'total_items' => 'Total Items',
-    'total_warehouses' => 'Total Warehouses',
+    'low_stock_items' => 'Low Stock Items',
     'pending_requests' => 'Pending Requests',
     'recent_issuances' => 'Recent Issuances',
     'quick_actions' => 'Quick Actions',
     'recent_activity' => 'Recent Activity',
-    'inventory_status' => 'Inventory Status',
-    
-    // Items
+    'new_request' => 'New Request',
+    'issue_items' => 'Issue Items',
     'add_item' => 'Add Item',
-    'edit_item' => 'Edit Item',
-    'item_details' => 'Item Details',
-    'model_19_number' => 'Model-19 Number',
-    'serial_number' => 'Serial Number',
-    'item_name' => 'Item Name',
-    'quantity' => 'Quantity',
-    'unit' => 'Unit',
-    'category' => 'Category',
-    'warehouse' => 'Warehouse',
-    'shelf_code' => 'Shelf Code',
-    'deliverer_name' => 'Deliverer Name',
-    'source_of_item' => 'Source of Item',
-    'received_date' => 'Received Date',
-    'registered_by' => 'Registered By',
-    'item_status' => 'Item Status',
-    
-    // Warehouses
-    'add_warehouse' => 'Add Warehouse',
-    'edit_warehouse' => 'Edit Warehouse',
-    'warehouse_name' => 'Warehouse Name',
-    'location' => 'Location',
-    'contact_person' => 'Contact Person',
-    
-    // Categories
-    'add_category' => 'Add Category',
-    'edit_category' => 'Edit Category',
-    'category_name' => 'Category Name',
-    
-    // Employees
-    'add_employee' => 'Add Employee',
-    'edit_employee' => 'Edit Employee',
-    'employee_name' => 'Employee Name',
-    'amharic_name' => 'Amharic Name',
-    'salary' => 'Salary',
-    'taamagoli' => 'Employee ID',
-    'directorate' => 'Directorate',
-    
-    // Customers
-    'add_customer' => 'Add Customer',
-    'edit_customer' => 'Edit Customer',
-    'customer_name' => 'Customer Name',
-    'customer_type' => 'Customer Type',
-    'purpose' => 'Purpose',
-    'duration_start' => 'Duration Start',
-    'duration_end' => 'Duration End',
-    
-    // Requests
-    'add_request' => 'Add Request',
-    'edit_request' => 'Edit Request',
-    'request_details' => 'Request Details',
-    'model_20_number' => 'Model-20 Number',
-    'requested_by' => 'Requested By',
-    'request_date' => 'Request Date',
-    'request_status' => 'Request Status',
-    
-    // Issuances
-    'add_issuance' => 'Add Issuance',
-    'edit_issuance' => 'Edit Issuance',
-    'issuance_details' => 'Issuance Details',
-    'model_22_number' => 'Model-22 Number',
-    'customer' => 'Customer',
-    'issued_by' => 'Issued By',
-    'approved_by' => 'Approved By',
-    'issuance_date' => 'Issuance Date',
-    'issuance_status' => 'Issuance Status',
-    'return_date' => 'Return Date',
-    'condition' => 'Condition',
-    
-    // Status values
-    'available' => 'Available',
-    'issued' => 'Issued',
-    'damaged' => 'Damaged',
-    'lost' => 'Lost',
-    'disposed' => 'Disposed',
-    'pending' => 'Pending',
-    'approved' => 'Approved',
-    'rejected' => 'Rejected',
-    'fulfilled' => 'Fulfilled',
-    'draft' => 'Draft',
-    'returned' => 'Returned',
-    'cancelled' => 'Cancelled',
-    'good' => 'Good',
-    
-    // Source types
-    'purchase' => 'Purchase',
-    'donation' => 'Donation',
-    'transfer' => 'Transfer',
-    'other' => 'Other',
-    
-    // Customer types
-    'internal' => 'Internal',
-    'external' => 'External',
     
     // Roles
-    'admin_role' => 'Administrator',
-    'manager_role' => 'Manager',
-    'staff_role' => 'Staff',
-    'viewer_role' => 'Viewer',
-    
-    // Messages
-    'login_success' => 'Login successful',
-    'login_failed' => 'Invalid email or password',
-    'logout_success' => 'Logged out successfully',
-    'created_success' => 'Created successfully',
-    'updated_success' => 'Updated successfully',
-    'deleted_success' => 'Deleted successfully',
-    'error_occurred' => 'An error occurred',
-    'confirm_delete' => 'Are you sure you want to delete this item?',
-    'no_permission' => 'You do not have permission to perform this action',
-    
-    // Calendar
-    'gregorian' => 'Gregorian',
-    'ethiopian' => 'Ethiopian',
-    'calendar_type' => 'Calendar Type',
-    
-    // Language
-    'english' => 'English',
-    'amharic' => 'Amharic',
-    'language' => 'Language',
-    
-    // Theme
-    'light_mode' => 'Light Mode',
-    'dark_mode' => 'Dark Mode',
+    'admin' => 'Administrator',
+    'manager' => 'Manager',
+    'staff' => 'Staff',
+    'viewer' => 'Viewer',
     
     // Reports
+    'stock_report' => 'Stock Report',
+    'movement_report' => 'Movement Report',
+    'request_report' => 'Request Report',
+    'issuance_report' => 'Issuance Report',
     'generate_report' => 'Generate Report',
-    'export_pdf' => 'Export PDF',
-    'export_excel' => 'Export Excel',
-    'inventory_report' => 'Inventory Report',
+    'export_pdf' => 'Export to PDF',
+    'export_excel' => 'Export to Excel',
     
-    // Documents
-    'upload_document' => 'Upload Document',
-    'document_type' => 'Document Type',
-    'file' => 'File',
+    // Months
+    'january' => 'January',
+    'february' => 'February',
+    'march' => 'March',
+    'april' => 'April',
+    'may' => 'May',
+    'june' => 'June',
+    'july' => 'July',
+    'august' => 'August',
+    'september' => 'September',
+    'october' => 'October',
+    'november' => 'November',
+    'december' => 'December',
     
-    // Validation
-    'field_required' => 'This field is required',
-    'invalid_email' => 'Invalid email address',
-    'invalid_date' => 'Invalid date',
+    // Footer
+    'version' => 'Version',
+    'copyright' => 'Copyright',
+    'all_rights_reserved' => 'All rights reserved',
+    
+    // Additional
+    'actions' => 'Actions',
+    'all' => 'All',
+    'by' => 'By',
+    'next' => 'Next',
+    'previous' => 'Previous',
+    'notes' => 'Notes',
 ];

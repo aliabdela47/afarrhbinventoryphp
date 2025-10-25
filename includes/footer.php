@@ -1,3 +1,23 @@
+    <!-- Footer -->
+    <footer class="main-footer" id="mainFooter">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 text-md-start text-center">
+                    <small>&copy; <?php echo date('Y'); ?> <?php echo e(APP_NAME); ?>. <?php echo e(t('all_rights_reserved')); ?></small>
+                </div>
+                <div class="col-md-6 text-md-end text-center">
+                    <small><?php echo e(t('version')); ?>: <?php echo e(APP_VERSION); ?></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Alpine.js -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </main>
     
     <!-- Footer -->
@@ -168,13 +188,14 @@
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: '<?php echo __('yes'); ?>',
-                cancelButtonText: '<?php echo __('cancel'); ?>'
+                confirmButtonText: '<?php echo e(t('delete')); ?>',
+                cancelButtonText: '<?php echo e(t('cancel')); ?>'
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = url;
                 }
             });
+            return false;
         }
     </script>
 </body>

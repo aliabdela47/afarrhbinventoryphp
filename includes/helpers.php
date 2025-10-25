@@ -1,363 +1,330 @@
 <?php
 /**
  * Helper Functions
+ * AfarRHB Inventory Management System
  */
 
 /**
- * Get base URL
+ * Escape output to prevent XSS
  */
-function baseUrl($path = '') {
-    return BASE_URL . '/' . ltrim($path, '/');
+function e($string) {
+    if ($string === null) {
+        return '';
+    }
+    return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
 
 /**
- * Redirect to URL
+ * Redirect to a page
  */
 function redirect($url) {
-    header('Location: ' . $url);
-    exit;
+    header("Location: " . $url);
+    exit();
 }
 
 /**
- * HTML escape
+ * Set flash message
  */
-function e($value) {
-    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+function flash($type, $message) {
+    $_SESSION['flash'] = [
+        'type' => $type,
+        'message' => $message
+    ];
+}
+
+/**
+ * Get and clear flash message
+ */
+function getFlash() {
+    if (isset($_SESSION['flash'])) {
+        $flash = $_SESSION['flash'];
+        unset($_SESSION['flash']);
+        return $flash;
+    }
+    return null;
+}
+
+/**
+ * Translate text based on current language
+ */
+function t($key) {
+    global $translations;
+    return $translations[$key] ?? $key;
+}
+
+/**
+ * Load language file
+ */
+function loadLanguage($lang = 'en') {
+    $langFile = BASE_PATH . "/lang/{$lang}.php";
+    if (file_exists($langFile)) {
+        return require $langFile;
+    }
+    return require BASE_PATH . "/lang/en.php";
 }
 
 /**
  * Generate CSRF token
  */
 function generateCsrfToken() {
-    if (!isset($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(CSRF_TOKEN_LENGTH));
+    if (!isset($_SESSION[CSRF_TOKEN_NAME])) {
+        $_SESSION[CSRF_TOKEN_NAME] = bin2hex(random_bytes(32));
     }
-    return $_SESSION['csrf_token'];
+    return $_SESSION[CSRF_TOKEN_NAME];
 }
 
 /**
  * Verify CSRF token
  */
 function verifyCsrfToken($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
-}
-
-/**
- * Get CSRF input field
- */
-function csrfField() {
-    $token = generateCsrfToken();
-    return '<input type="hidden" name="csrf_token" value="' . e($token) . '">';
-}
-
-/**
- * Validate CSRF token from request
- */
-function validateCsrf() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $token = $_POST['csrf_token'] ?? '';
-        if (!verifyCsrfToken($token)) {
-            http_response_code(403);
-            die('CSRF token validation failed');
-        }
+    if (!isset($_SESSION[CSRF_TOKEN_NAME]) || !hash_equals($_SESSION[CSRF_TOKEN_NAME], $token)) {
+        return false;
     }
+    return true;
 }
 
-// ============================================
-// Internationalization (i18n)
-// ============================================
+/**
+ * Get user IP address
+ */
+function getUserIP() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    return $_SERVER['REMOTE_ADDR'];
+}
 
 /**
- * Get translated text
+ * Log audit trail
  */
-function __($key, $default = null) {
-    static $translations = null;
-    
-    if ($translations === null) {
-        $lang = $_SESSION['lang'] ?? DEFAULT_LANG;
-        $langFile = BASE_PATH . "/lang/{$lang}.php";
+function logAudit($pdo, $action, $tableName, $recordId = null, $oldValue = null, $newValue = null) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO AUDITLOG (user_id, action, table_name, record_id, old_value, new_value, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
         
-        if (file_exists($langFile)) {
-            $translations = require $langFile;
-        } else {
-            $translations = [];
-        }
-    }
-    
-    return $translations[$key] ?? $default ?? $key;
-}
-
-/**
- * Get current language
- */
-function currentLang() {
-    return $_SESSION['lang'] ?? DEFAULT_LANG;
-}
-
-/**
- * Set language
- */
-function setLang($lang) {
-    if (in_array($lang, ['en', 'am'])) {
-        $_SESSION['lang'] = $lang;
+        $userId = $_SESSION['user_id'] ?? null;
+        $ipAddress = getUserIP();
+        
+        $stmt->execute([
+            $userId,
+            $action,
+            $tableName,
+            $recordId,
+            $oldValue ? json_encode($oldValue) : null,
+            $newValue ? json_encode($newValue) : null,
+            $ipAddress
+        ]);
+    } catch (PDOException $e) {
+        error_log("Audit log error: " . $e->getMessage());
     }
 }
 
 /**
- * Get current calendar type
+ * Sanitize filename
  */
-function currentCalendar() {
-    return $_SESSION['calendar'] ?? DEFAULT_CALENDAR;
+function sanitizeFilename($filename) {
+    // Remove any path components
+    $filename = basename($filename);
+    
+    // Get extension
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    $name = pathinfo($filename, PATHINFO_FILENAME);
+    
+    // Clean the filename
+    $name = preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+    
+    // Generate unique name
+    $uniqueName = $name . '_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+    
+    return $uniqueName;
 }
 
 /**
- * Set calendar type
+ * Validate file upload
  */
-function setCalendar($calendar) {
-    if (in_array($calendar, ['gregorian', 'ethiopian'])) {
-        $_SESSION['calendar'] = $calendar;
-    }
-}
-
-// ============================================
-// Ethiopian Calendar Functions
-// ============================================
-
-/**
- * Convert Gregorian date to Ethiopian date
- * 
- * @param string $gregorianDate Date in Y-m-d format
- * @return array Ethiopian date ['year', 'month', 'day']
- */
-function gregorianToEthiopian($gregorianDate) {
-    $date = new DateTime($gregorianDate);
-    $timestamp = $date->getTimestamp();
-    
-    // Ethiopian calendar starts on September 11 (or 12 in leap years)
-    $ethiopianEpoch = mktime(0, 0, 0, 9, 11, 2007); // Jan 1, 2000 EC = Sept 11, 2007 GC
-    
-    $daysSinceEpoch = floor(($timestamp - $ethiopianEpoch) / 86400);
-    
-    // Calculate Ethiopian year
-    $ethiopianYear = 2000 + floor($daysSinceEpoch / 365.25);
-    
-    // Simple approximation - for production use a proper library
-    $dayOfYear = $daysSinceEpoch % 365;
-    $ethiopianMonth = floor($dayOfYear / 30) + 1;
-    $ethiopianDay = ($dayOfYear % 30) + 1;
-    
-    // Adjust for month boundaries
-    if ($ethiopianMonth > 13) {
-        $ethiopianMonth = 1;
-        $ethiopianYear++;
-    }
-    
-    return [
-        'year' => $ethiopianYear,
-        'month' => $ethiopianMonth,
-        'day' => $ethiopianDay
-    ];
-}
-
-/**
- * Convert Ethiopian date to Gregorian date
- * 
- * @param int $year Ethiopian year
- * @param int $month Ethiopian month (1-13)
- * @param int $day Ethiopian day
- * @return string Gregorian date in Y-m-d format
- */
-function ethiopianToGregorian($year, $month, $day) {
-    // Ethiopian calendar starts on September 11 (or 12 in leap years)
-    $baseYear = 2007 + ($year - 2000);
-    
-    // Calculate days from start of Ethiopian year
-    $dayOfYear = (($month - 1) * 30) + $day;
-    
-    // Create base date (Sept 11 of the Gregorian year)
-    $baseDate = new DateTime("$baseYear-09-11");
-    
-    // Add the days
-    $baseDate->modify("+$dayOfYear days");
-    
-    return $baseDate->format('Y-m-d');
-}
-
-/**
- * Format date based on current calendar setting
- */
-function formatDate($date, $format = 'Y-m-d') {
-    if (empty($date) || $date === '0000-00-00') {
-        return '';
-    }
-    
-    $calendar = currentCalendar();
-    
-    if ($calendar === 'ethiopian') {
-        $eth = gregorianToEthiopian($date);
-        return sprintf('%04d-%02d-%02d', $eth['year'], $eth['month'], $eth['day']);
-    }
-    
-    return date($format, strtotime($date));
-}
-
-/**
- * Get Ethiopian month names
- */
-function getEthiopianMonths() {
-    return [
-        1 => 'Meskerem',
-        2 => 'Tikimt',
-        3 => 'Hidar',
-        4 => 'Tahsas',
-        5 => 'Tir',
-        6 => 'Yekatit',
-        7 => 'Megabit',
-        8 => 'Miazia',
-        9 => 'Ginbot',
-        10 => 'Sene',
-        11 => 'Hamle',
-        12 => 'Nehase',
-        13 => 'Pagumen'
-    ];
-}
-
-// ============================================
-// File Upload Functions
-// ============================================
-
-/**
- * Validate uploaded file
- */
-function validateUpload($file) {
+function validateFileUpload($file) {
     $errors = [];
     
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        $errors[] = 'File upload failed';
+    // Check if file was uploaded
+    if (!isset($file) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        $errors[] = "No file uploaded";
         return $errors;
     }
     
-    if ($file['size'] > MAX_FILE_SIZE) {
-        $errors[] = 'File size exceeds maximum allowed size';
+    // Check for upload errors
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $errors[] = "File upload error code: " . $file['error'];
+        return $errors;
     }
     
-    $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    if (!in_array($extension, ALLOWED_FILE_TYPES)) {
-        $errors[] = 'File type not allowed';
+    // Check file size
+    if ($file['size'] > UPLOAD_MAX_SIZE) {
+        $errors[] = "File size exceeds maximum allowed size of " . (UPLOAD_MAX_SIZE / 1024 / 1024) . "MB";
+    }
+    
+    // Check file type
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, ALLOWED_FILE_TYPES)) {
+        $errors[] = "File type not allowed. Allowed types: " . implode(', ', ALLOWED_FILE_TYPES);
     }
     
     return $errors;
 }
 
 /**
- * Upload file
+ * Format date for display
  */
-function uploadFile($file, $directory = DOCUMENT_DIR) {
-    $errors = validateUpload($file);
-    
-    if (!empty($errors)) {
-        return ['success' => false, 'errors' => $errors];
+function formatDate($date, $format = DISPLAY_DATE_FORMAT) {
+    if (empty($date)) {
+        return '';
     }
     
-    // Create directory if it doesn't exist
-    if (!is_dir($directory)) {
-        mkdir($directory, 0755, true);
-    }
-    
-    $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    $filename = uniqid() . '_' . time() . '.' . $extension;
-    $filepath = $directory . '/' . $filename;
-    
-    if (move_uploaded_file($file['tmp_name'], $filepath)) {
-        return [
-            'success' => true,
-            'filename' => $filename,
-            'filepath' => $filepath,
-            'relative_path' => str_replace(BASE_PATH . '/', '', $filepath)
-        ];
-    }
-    
-    return ['success' => false, 'errors' => ['Failed to save file']];
+    $timestamp = is_numeric($date) ? $date : strtotime($date);
+    return date($format, $timestamp);
 }
-
-// ============================================
-// Utility Functions
-// ============================================
 
 /**
  * Format currency
  */
-function formatCurrency($amount) {
-    return number_format($amount, 2) . ' ETB';
+function formatCurrency($amount, $currency = 'ETB') {
+    return $currency . ' ' . number_format($amount, 2);
 }
 
 /**
- * Format number
+ * Generate unique code
  */
-function formatNumber($number, $decimals = 0) {
-    return number_format($number, $decimals);
+function generateUniqueCode($prefix, $length = 6) {
+    $timestamp = time();
+    $random = strtoupper(substr(md5($timestamp . rand()), 0, $length));
+    return $prefix . '-' . date('Y') . '-' . $random;
 }
 
 /**
- * Get flash message
+ * Paginate results
  */
-function getFlash($key) {
-    if (isset($_SESSION['flash'][$key])) {
-        $message = $_SESSION['flash'][$key];
-        unset($_SESSION['flash'][$key]);
-        return $message;
-    }
-    return null;
+function paginate($totalItems, $currentPage = 1, $perPage = ITEMS_PER_PAGE) {
+    $totalPages = ceil($totalItems / $perPage);
+    $currentPage = max(1, min($currentPage, $totalPages));
+    $offset = ($currentPage - 1) * $perPage;
+    
+    return [
+        'total_items' => $totalItems,
+        'total_pages' => $totalPages,
+        'current_page' => $currentPage,
+        'per_page' => $perPage,
+        'offset' => $offset,
+        'has_previous' => $currentPage > 1,
+        'has_next' => $currentPage < $totalPages
+    ];
 }
 
 /**
- * Set flash message
+ * Ethiopian to Gregorian date conversion (using JDN)
  */
-function setFlash($key, $message) {
-    $_SESSION['flash'][$key] = $message;
+function ethiopianToGregorian($ethYear, $ethMonth, $ethDay) {
+    // Convert Ethiopian date to JDN
+    $jdn = ethiopianToJDN($ethYear, $ethMonth, $ethDay);
+    
+    // Convert JDN to Gregorian
+    return jdnToGregorian($jdn);
 }
 
 /**
- * Generate pagination HTML
+ * Ethiopian date to JDN
  */
-function pagination($currentPage, $totalPages, $baseUrl) {
-    if ($totalPages <= 1) {
-        return '';
-    }
-    
-    $html = '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
-    
-    // Previous button
-    if ($currentPage > 1) {
-        $html .= '<li class="page-item"><a class="page-link" href="' . $baseUrl . '?page=' . ($currentPage - 1) . '">' . __('Previous') . '</a></li>';
-    } else {
-        $html .= '<li class="page-item disabled"><span class="page-link">' . __('Previous') . '</span></li>';
-    }
-    
-    // Page numbers
-    for ($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++) {
-        $active = $i === $currentPage ? 'active' : '';
-        $html .= '<li class="page-item ' . $active . '"><a class="page-link" href="' . $baseUrl . '?page=' . $i . '">' . $i . '</a></li>';
-    }
-    
-    // Next button
-    if ($currentPage < $totalPages) {
-        $html .= '<li class="page-item"><a class="page-link" href="' . $baseUrl . '?page=' . ($currentPage + 1) . '">' . __('Next') . '</a></li>';
-    } else {
-        $html .= '<li class="page-item disabled"><span class="page-link">' . __('Next') . '</span></li>';
-    }
-    
-    $html .= '</ul></nav>';
-    
-    return $html;
+function ethiopianToJDN($year, $month, $day) {
+    $jdn = (1723856 + 365) +
+           365 * ($year - 1) +
+           floor($year / 4) +
+           30 * $month +
+           $day - 31;
+    return $jdn;
 }
 
 /**
- * Sanitize input
+ * JDN to Gregorian date
  */
-function sanitize($data) {
-    if (is_array($data)) {
-        return array_map('sanitize', $data);
-    }
-    return trim(strip_tags($data));
+function jdnToGregorian($jdn) {
+    $a = $jdn + 32044;
+    $b = floor((4 * $a + 3) / 146097);
+    $c = $a - floor((146097 * $b) / 4);
+    $d = floor((4 * $c + 3) / 1461);
+    $e = $c - floor((1461 * $d) / 4);
+    $m = floor((5 * $e + 2) / 153);
+    
+    $day = $e - floor((153 * $m + 2) / 5) + 1;
+    $month = $m + 3 - 12 * floor($m / 10);
+    $year = 100 * $b + $d - 4800 + floor($m / 10);
+    
+    return [
+        'year' => $year,
+        'month' => $month,
+        'day' => $day,
+        'date' => sprintf('%04d-%02d-%02d', $year, $month, $day)
+    ];
 }
+
+/**
+ * Gregorian to Ethiopian date conversion
+ */
+function gregorianToEthiopian($gregYear, $gregMonth, $gregDay) {
+    $jdn = gregorianToJDN($gregYear, $gregMonth, $gregDay);
+    return jdnToEthiopian($jdn);
+}
+
+/**
+ * Gregorian to JDN
+ */
+function gregorianToJDN($year, $month, $day) {
+    $a = floor((14 - $month) / 12);
+    $y = $year + 4800 - $a;
+    $m = $month + 12 * $a - 3;
+    
+    return $day + floor((153 * $m + 2) / 5) + 365 * $y + floor($y / 4) - floor($y / 100) + floor($y / 400) - 32045;
+}
+
+/**
+ * JDN to Ethiopian date
+ */
+function jdnToEthiopian($jdn) {
+    $r = ($jdn - 1723856) % 1461;
+    $n = ($r % 365) + 365 * floor($r / 1460);
+    
+    $year = 4 * floor(($jdn - 1723856) / 1461) + floor($r / 365) - floor($r / 1460);
+    $month = floor($n / 30) + 1;
+    $day = ($n % 30) + 1;
+    
+    return [
+        'year' => $year,
+        'month' => $month,
+        'day' => $day,
+        'date' => sprintf('%04d-%02d-%02d', $year, $month, $day)
+    ];
+}
+
+/**
+ * Get Ethiopian month name
+ */
+function getEthiopianMonthName($month, $lang = 'en') {
+    $months = [
+        'en' => [
+            1 => 'Meskerem', 2 => 'Tikimt', 3 => 'Hidar', 4 => 'Tahsas',
+            5 => 'Tir', 6 => 'Yekatit', 7 => 'Megabit', 8 => 'Miazia',
+            9 => 'Ginbot', 10 => 'Sene', 11 => 'Hamle', 12 => 'Nehase', 13 => 'Pagume'
+        ],
+        'am' => [
+            1 => 'መስከረም', 2 => 'ጥቅምት', 3 => 'ኅዳር', 4 => 'ታኅሣሥ',
+            5 => 'ጥር', 6 => 'የካቲት', 7 => 'መጋቢት', 8 => 'ሚያዝያ',
+            9 => 'ግንቦት', 10 => 'ሰኔ', 11 => 'ሐምሌ', 12 => 'ነሐሴ', 13 => 'ጳጉሜ'
+        ]
+    ];
+    
+    return $months[$lang][$month] ?? $month;
+}
+
+// Load translations for current language
+$currentLang = $_SESSION['lang'] ?? 'en';
+$translations = loadLanguage($currentLang);
