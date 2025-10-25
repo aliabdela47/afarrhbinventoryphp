@@ -32,6 +32,14 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) as count FROM ISSUANCES WHERE issue_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)");
     $recentIssuances = $stmt->fetch()['count'];
     
+    // Available vehicles
+    $stmt = $pdo->query("SELECT COUNT(*) as count FROM VEHICLES WHERE status = 'Available'");
+    $availableVehicles = $stmt->fetch()['count'];
+    
+    // Vehicles on field work
+    $stmt = $pdo->query("SELECT COUNT(*) as count FROM VEHICLE_ASSIGNMENTS WHERE status = 'Active'");
+    $vehiclesOnField = $stmt->fetch()['count'];
+    
     // Recent activities (last 10)
     $stmt = $pdo->query("
         SELECT a.*, u.full_name as user_name
@@ -57,6 +65,7 @@ try {
 } catch (PDOException $e) {
     error_log("Dashboard error: " . $e->getMessage());
     $totalItems = $lowStockItems = $pendingRequests = $recentIssuances = 0;
+    $availableVehicles = $vehiclesOnField = 0;
     $recentActivities = $lowStockItemsList = [];
 }
 
@@ -130,6 +139,47 @@ include 'includes/sidebar.php';
                         <div>
                             <i class="bi bi-arrow-right-circle" style="font-size: 3rem; opacity: 0.3;"></i>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vehicle Metric Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="metric-card success">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1 opacity-75"><?php echo e(t('available_vehicles')); ?></p>
+                            <h3 class="mb-0"><?php echo e(number_format($availableVehicles)); ?></h3>
+                        </div>
+                        <div>
+                            <i class="bi bi-truck" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <a href="pages/vehicles/list.php?status=Available" class="text-white text-decoration-none">
+                            <small><?php echo e(t('view')); ?> <?php echo e(t('all')); ?> <i class="bi bi-arrow-right"></i></small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="metric-card primary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1 opacity-75"><?php echo e(t('vehicles_on_field')); ?></p>
+                            <h3 class="mb-0"><?php echo e(number_format($vehiclesOnField)); ?></h3>
+                        </div>
+                        <div>
+                            <i class="bi bi-geo-alt" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <a href="pages/vehicles/assignments/list.php?status=Active" class="text-white text-decoration-none">
+                            <small><?php echo e(t('view')); ?> <?php echo e(t('all')); ?> <i class="bi bi-arrow-right"></i></small>
+                        </a>
                     </div>
                 </div>
             </div>
