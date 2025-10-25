@@ -1,0 +1,180 @@
+<?php
+/**
+ * Amharic Language File
+ * AfarRHB Inventory Management System
+ */
+
+return [
+    // General
+    'app_name' => 'የአፋር ጤና ቢሮ ንብረት አስተዳደር',
+    'welcome' => 'እንኳን ደህና መጡ',
+    'logout' => 'ውጣ',
+    'login' => 'ግባ',
+    'dashboard' => 'መሰሪ ሰሌዳ',
+    'search' => 'ፈልግ',
+    'language' => 'ቋንቋ',
+    'calendar' => 'ቀን መቁጠሪያ',
+    'gregorian' => 'ግሪጎሪያን',
+    'ethiopian' => 'ኢትዮጵያዊ',
+    'dark_mode' => 'ጨለማ ሁኔታ',
+    'light_mode' => 'ብርሃን ሁኔታ',
+    'notifications' => 'ማሳወቂያዎች',
+    'profile' => 'መገለጫ',
+    'settings' => 'ቅንብሮች',
+    
+    // Navigation
+    'inventory' => 'ዕቃዎች',
+    'items' => 'ዕቃዎች',
+    'categories' => 'ምድቦች',
+    'warehouses' => 'መጋዘኖች',
+    'requests' => 'ጥያቄዎች',
+    'issuances' => 'ስርጭቶች',
+    'customers' => 'ደንበኞች',
+    'employees' => 'ሰራተኞች',
+    'reports' => 'ሪፖርቶች',
+    'audit_logs' => 'ኦዲት ምዝገባዎች',
+    
+    // Actions
+    'add' => 'አክል',
+    'edit' => 'አርትዕ',
+    'delete' => 'ሰርዝ',
+    'view' => 'ተመልከት',
+    'save' => 'አስቀምጥ',
+    'cancel' => 'ሰርዝ',
+    'submit' => 'አስገባ',
+    'close' => 'ዝጋ',
+    'print' => 'አትም',
+    'export' => 'ወደ ውጭ ላክ',
+    'import' => 'አስገባ',
+    'download' => 'አውርድ',
+    'upload' => 'ስቀል',
+    'approve' => 'ፈቅድ',
+    'reject' => 'ውድቅ አድርግ',
+    'issue' => 'አሰራጭ',
+    
+    // Forms
+    'name' => 'ስም',
+    'description' => 'መግለጫ',
+    'email' => 'ኢሜል',
+    'password' => 'የይለፍ ቃል',
+    'confirm_password' => 'የይለፍ ቃል አረጋግጥ',
+    'full_name' => 'ሙሉ ስም',
+    'username' => 'የተጠቃሚ ስም',
+    'role' => 'ሚና',
+    'phone' => 'ስልክ',
+    'address' => 'አድራሻ',
+    'status' => 'ሁኔታ',
+    'active' => 'ንቁ',
+    'inactive' => 'ቅስቀሳ',
+    'date' => 'ቀን',
+    'time' => 'ሰዓት',
+    'created_at' => 'የተፈጠረበት',
+    'updated_at' => 'የተሻሻለበት',
+    
+    // Items
+    'item_code' => 'የዕቃ ኮድ',
+    'item_name' => 'የዕቃ ስም',
+    'category' => 'ምድብ',
+    'warehouse' => 'መጋዘን',
+    'unit' => 'መለኪያ',
+    'quantity' => 'ብዛት',
+    'current_stock' => 'ያሁኑ አክሲዮን',
+    'reorder_level' => 'የድጋሚ ትዕዛዝ ደረጃ',
+    'unit_price' => 'የአሃድ ዋጋ',
+    'total_price' => 'ጠቅላላ ዋጋ',
+    'low_stock' => 'ዝቅተኛ አክሲዮን',
+    
+    // Requests
+    'request_number' => 'የጥያቄ ቁጥር',
+    'requester' => 'ጠያቂ',
+    'department' => 'ክፍል',
+    'request_date' => 'የጥያቄ ቀን',
+    'purpose' => 'ዓላማ',
+    'requested_quantity' => 'የተጠየቀ ብዛት',
+    'approved_quantity' => 'የፀደቀ ብዛት',
+    'pending' => 'በመጠባበቅ ላይ',
+    'approved' => 'ፀድቋል',
+    'rejected' => 'ውድቅ ተደርጓል',
+    'issued' => 'ተሰራጭቷል',
+    
+    // Issuances
+    'issuance_number' => 'የስርጭት ቁጥር',
+    'issued_to' => 'ለ',
+    'issued_by' => 'በ',
+    'issue_date' => 'የስርጭት ቀን',
+    'receiver_signature' => 'የተቀባይ ፊርማ',
+    'issuer_signature' => 'የሰጪ ፊርማ',
+    
+    // Customers
+    'customer_code' => 'የደንበኛ ኮድ',
+    'customer_name' => 'የደንበኛ ስም',
+    'contact_person' => 'የመገናኛ ሰው',
+    
+    // Employees
+    'employee_code' => 'የሰራተኛ ኮድ',
+    'employee_name' => 'የሰራተኛ ስም',
+    'position' => 'ቦታ',
+    
+    // Messages
+    'please_login' => 'እባክዎን ለመቀጠል ይግቡ',
+    'login_success' => 'በተሳካ ሁኔታ ገብተዋል',
+    'login_failed' => 'ልክ ያልሆነ ኢሜል ወይም የይለፍ ቃል',
+    'logout_success' => 'በተሳካ ሁኔታ ወጥተዋል',
+    'access_denied' => 'መዳረሻ ተከልክሏል',
+    'save_success' => 'በተሳካ ሁኔታ ተቀምጧል',
+    'save_failed' => 'ማስቀመጥ አልተሳካም',
+    'delete_success' => 'በተሳካ ሁኔታ ተሰርዟል',
+    'delete_failed' => 'መሰረዝ አልተሳካም',
+    'delete_confirm' => 'እርግጠኛ ነዎት ይህንን ዕቃ መሰረዝ ይፈልጋሉ?',
+    'no_records' => 'ምንም መዝገቦች አልተገኙም',
+    'error_occurred' => 'ስህተት ተከስቷል',
+    'required_field' => 'ይህ መስክ ያስፈልጋል',
+    'invalid_email' => 'ልክ ያልሆነ የኢሜል አድራሻ',
+    'invalid_password' => 'የይለፍ ቃል ቢያንስ 8 ቁምፊዎች ከትልቁ፣ ከትንሹ እና ከቁጥር ጋር መሆን አለበት',
+    'passwords_not_match' => 'የይለፍ ቃሎች አይዛመዱም',
+    
+    // Dashboard
+    'total_items' => 'ጠቅላላ ዕቃዎች',
+    'low_stock_items' => 'ዝቅተኛ አክሲዮን ዕቃዎች',
+    'pending_requests' => 'በመጠባበቅ ላይ ያሉ ጥያቄዎች',
+    'recent_issuances' => 'የቅርብ ጊዜ ስርጭቶች',
+    'quick_actions' => 'ፈጣን እርምጃዎች',
+    'recent_activity' => 'የቅርብ ጊዜ እንቅስቃሴ',
+    'new_request' => 'አዲስ ጥያቄ',
+    'issue_items' => 'ዕቃዎችን አሰራጭ',
+    'add_item' => 'ዕቃ አክል',
+    
+    // Roles
+    'admin' => 'አስተዳዳሪ',
+    'manager' => 'ሥራ አስኪያጅ',
+    'staff' => 'ሰራተኛ',
+    'viewer' => 'ተመልካች',
+    
+    // Reports
+    'stock_report' => 'የአክሲዮን ሪፖርት',
+    'movement_report' => 'የእንቅስቃሴ ሪፖርት',
+    'request_report' => 'የጥያቄ ሪፖርት',
+    'issuance_report' => 'የስርጭት ሪፖርት',
+    'generate_report' => 'ሪፖርት ይፍጠሩ',
+    'export_pdf' => 'ወደ PDF ላክ',
+    'export_excel' => 'ወደ Excel ላክ',
+    
+    // Months
+    'january' => 'ጃንዩወሪ',
+    'february' => 'ፌብሩወሪ',
+    'march' => 'ማርች',
+    'april' => 'ኤፕሪል',
+    'may' => 'ሜይ',
+    'june' => 'ጁን',
+    'july' => 'ጁላይ',
+    'august' => 'ኦገስት',
+    'september' => 'ሴፕቴምበር',
+    'october' => 'ኦክቶበር',
+    'november' => 'ኖቬምበር',
+    'december' => 'ዲሴምበር',
+    
+    // Footer
+    'version' => 'ስሪት',
+    'copyright' => 'የቅጂ መብት',
+    'all_rights_reserved' => 'መብቱ በህግ የተጠበቀ ነው',
+];

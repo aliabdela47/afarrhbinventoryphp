@@ -1,0 +1,45 @@
+# PHP
+*.log
+*.cache
+*.tmp
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Composer (if used)
+vendor/
+composer.lock
+
+# Node modules (if used)
+node_modules/
+package-lock.json
+
+# Build artifacts
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Database
+*.sql.backup
+*.sql.gz
