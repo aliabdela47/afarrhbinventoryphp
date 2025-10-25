@@ -51,6 +51,7 @@ return [
     'approve' => 'Approve',
     'reject' => 'Reject',
     'issue' => 'Issue',
+    'clear' => 'Clear',
     
     // Forms
     'name' => 'Name',

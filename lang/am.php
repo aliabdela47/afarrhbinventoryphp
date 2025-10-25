@@ -51,6 +51,7 @@ return [
     'approve' => 'ፈቅድ',
     'reject' => 'ውድቅ አድርግ',
     'issue' => 'አሰራጭ',
+    'clear' => 'አጽዳ',
     
     // Forms
     'name' => 'ስም',
