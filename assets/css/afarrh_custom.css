@@ -1,0 +1,307 @@
+/**
+ * AfarRH Custom Styles
+ * Project-specific customizations
+ */
+
+/* Ethiopian calendar toggle */
+.calendar-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.calendar-toggle label {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+}
+
+/* Language switcher */
+.language-switcher {
+    display: flex;
+    gap: 4px;
+}
+
+.language-switcher button {
+    padding: 4px 8px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.language-switcher button.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+/* Stock level indicators */
+.stock-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stock-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.stock-indicator.high {
+    background: var(--success-color);
+}
+
+.stock-indicator.medium {
+    background: var(--warning-color);
+}
+
+.stock-indicator.low {
+    background: var(--danger-color);
+}
+
+/* Vehicle status badges */
+.vehicle-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.vehicle-status.available {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.vehicle-status.in-use {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.vehicle-status.maintenance {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* Map container */
+.map-container {
+    height: 500px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Timeline for tracking */
+.tracking-timeline {
+    position: relative;
+    padding-left: 24px;
+}
+
+.tracking-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e0e0e0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -20px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.timeline-content {
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.timeline-time {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 4px;
+}
+
+/* Searchable select */
+.searchable-select {
+    position: relative;
+}
+
+.searchable-select input {
+    width: 100%;
+}
+
+.searchable-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 100;
+}
+
+.searchable-select-dropdown.active {
+    display: block;
+}
+
+.searchable-select-option {
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.searchable-select-option:hover {
+    background: #f5f5f5;
+}
+
+.searchable-select-option.selected {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Audit log viewer */
+.audit-log-entry {
+    padding: 12px;
+    background: #f9f9f9;
+    border-left: 3px solid #ddd;
+    margin-bottom: 8px;
+    border-radius: 0 4px 4px 0;
+}
+
+.audit-log-entry.create {
+    border-left-color: var(--success-color);
+}
+
+.audit-log-entry.update {
+    border-left-color: var(--info-color);
+}
+
+.audit-log-entry.delete {
+    border-left-color: var(--danger-color);
+}
+
+.audit-log-user {
+    font-weight: 600;
+    color: #333;
+}
+
+.audit-log-action {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.audit-log-changes {
+    margin-top: 8px;
+    padding: 8px;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* File attachments list */
+.attachments-list {
+    list-style: none;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.attachment-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 4px;
+    margin-right: 12px;
+}
+
+.attachment-info {
+    flex: 1;
+}
+
+.attachment-name {
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.attachment-meta {
+    font-size: 11px;
+    color: #999;
+}
+
+/* Print styles */
+@media print {
+    .layout-menu,
+    .layout-navbar,
+    .no-print {
+        display: none !important;
+    }
+    
+    .layout-container {
+        margin-left: 0;
+    }
+    
+    .content-wrapper {
+        padding: 0;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body.dark-mode {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+    
+    body.dark-mode .card {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    body.dark-mode .form-control {
+        background: #3d3d3d;
+        border-color: #4d4d4d;
+        color: #e0e0e0;
+    }
+}
